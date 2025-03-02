@@ -1,0 +1,62 @@
+<app-sidebar></app-sidebar>
+<app-header></app-header>
+<div class="main main-app p-3 p-lg-4">
+    <div class="d-flex align-items-center justify-content-between mb-4">
+        <div>
+            <ol class="breadcrumb fs-sm mb-1">
+                <li class="breadcrumb-item"><a href="#">Dashboard</a></li>
+            </ol>
+            <h4 class="main-title mb-0">Fundación Escuela Técnologica de Neiva Jesús Oviedo Pérez</h4>
+        </div>
+    </div>
+    <div class="row g-3">
+        <div class="col-6 col-xl-6">
+            <div class="card card-one">
+                <div class="card-body">
+                    <label class="card-title fs-sm fw-medium mb-1">Cantidad de programas</label>
+                    <h3 class="card-value mb-1"><i class="ri-shopping-bag-3-line"></i> {{cantidadProgramas}}</h3>
+                </div><!-- card-body -->
+            </div><!-- card-one -->
+        </div><!-- col -->
+        <div class="col-6 col-xl-6">
+            <div class="card card-one">
+                <div class="card-body">
+                    <label class="card-title fs-sm fw-medium mb-1">Cantidad de proyectos</label>
+                    <h3 class="card-value mb-1"><i class="ri-inbox-line"></i> {{cantidadProyectos}}</h3>
+                </div><!-- card-body -->
+            </div><!-- card-one -->
+        </div><!-- col -->
+        <div class="col-xl-12">
+            <div class="card card-one">
+                <div class="card-header">
+                    <h2 class="card-title">Lista de proyectos</h2>
+                </div><!-- card-header -->
+                <div class="card-body">
+                    <div class="form-search me-auto col-xl-4 col-md-6 col-xs-12">
+                        <input type="text" class="form-control" placeholder="Buscar proyecto"
+                        (ngModelChange)="filtrarProyectos($event)" ngModel>
+                        <i class="ri-search-line"></i>
+                    </div><!-- form-search -->
+                    <table class="table table-one mt-4">
+                        <thead>
+                            <tr>
+                                <th class="text-success">Código</th>
+                                <th class="text-success">Nombre del proyecto</th>
+                                <th class="text-success">Programa</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let item of listaProyectos" (click)="obtenerProyecto(item)">
+                                <td class="tamanio-xs"><span class="badge-dot me-2 {{item.alerta}}"></span> {{item.codigo}}
+                                </td>
+                                <td class="tamanio-md">{{item.nombreProyecto}}</td>
+                                <td class="tamanio-xl">{{item.programa}}</td>
+                            </tr>
+
+                        </tbody>
+                    </table>
+                </div><!-- card-body -->
+            </div><!-- card -->
+        </div><!-- col -->
+    </div><!-- row -->
+</div><!-- main -->
