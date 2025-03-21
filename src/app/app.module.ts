@@ -1,3 +1,4 @@
+import { JwtModule } from '@auth0/angular-jwt';
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { AppRoutingModule } from './app-routing.module';
@@ -10,12 +11,21 @@ import { NotfoundComponent } from './components/dashboard/notfound/notfound.comp
 import { ProjectRegisterComponent } from './components/dashboard/project-register/project-register.component';
 import { SidebarComponent } from './components/dashboard/sidebar/sidebar.component';
 import { LoginComponent } from './components/login/login.component';
-import { HttpClientModule } from '@angular/common/http';
+import { HttpClientModule , HTTP_INTERCEPTORS } from '@angular/common/http';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { AuthInterceptor } from './interceptors/auth.interceptor';
+import { environment } from '../environments/environment';
+import { ForbidenComponent } from './components/dashboard/forbiden/forbiden/forbiden.component';
+
+
+export function tokenGetter() {
+  return localStorage.getItem('auth_token');
+}
+
 @NgModule({
   declarations: [
     AppComponent,
@@ -26,7 +36,8 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
     NotfoundComponent,
     ProjectRegisterComponent,
     SidebarComponent,
-    LoginComponent
+    LoginComponent,
+    ForbidenComponent
   ],
   imports: [
     BrowserModule,
@@ -37,9 +48,15 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
     BrowserAnimationsModule,
     MatFormFieldModule,
     MatInputModule,
-    MatSelectModule
+    MatSelectModule,
+    JwtModule.forRoot({
+      config: {
+        tokenGetter: tokenGetter,
+        disallowedRoutes: [`${environment.apiUrl}/auth/login`]
+      }
+    })
   ],
-  providers: [],
+  providers: [ { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true }],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

@@ -1,19 +1,19 @@
 <div class="page-sign page-login">
   <div class="card card-sign">
     <div class="card-header">
-      <div class="header-logo mb-5"><img src="../../../assets/img/fetlogo.png" alt=""></div>
+      <div class="header-logo mb-5"><img src="../../../assets/img/fetlogo.png"></div>
       <h3 class="card-title">Iniciar sesión</h3>
       <p class="card-text">Repositorio de proyectos FET.</p>
-    </div><!-- card-header -->
+    </div>
     <div class="card-body">
       <form [formGroup]="formulario">
         <div class="mb-3">
           <label class="form-label">Usuario</label>
-          <input type="text" class="form-control" placeholder="Ingrese el correo electrónico" matInput formControlName="usuario">
+          <input type="text" class="form-control" placeholder="Ingrese el correo electrónico" matInput formControlName="email">
         </div>
         <div class="mb-3">
           <label class="form-label">Contraseña</label>
-          <input type="password" class="form-control" placeholder="Ingrese la contraseña" matInput formControlName="contrasenia">
+          <input type="password" class="form-control" placeholder="Ingrese la contraseña" matInput formControlName="password">
         </div>
       </form>
       <div class="text-danger">

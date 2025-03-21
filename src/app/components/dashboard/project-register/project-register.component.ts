@@ -20,16 +20,17 @@ declare function script(): void;
   styleUrl: './project-register.component.scss'
 })
 export class ProjectRegisterComponent implements OnInit, AfterViewInit {
-  formularioProyectos!: FormGroup;
-  mensajeAlerta: string = '';
-  tipoAlerta: string = '';
-  listaProgramas!: Programs[];
-  pronombre: string = '';
-  idPrograma: string = '';
-  nombrePrograma!: string;
-  anioProyecto: string = '';
-  maximo!: string;
-  estadosProyectos: Status[] = [];
+    formularioProyectos!: FormGroup;
+    mensajeAlerta: string = '';
+    tipoAlerta: string = '';
+    listaProgramas!: Programs[];
+    pronombre: string = '';
+    idPrograma: number = 0;
+    nombrePrograma: string = '';
+    anioProyecto: string = '';
+    maximo!: string;
+    estadosProyectos: Status[] = [];
+    cantidadProyectos: number = 0;
 
   constructor(
     private readonly formBuilder: FormBuilder,
@@ -49,6 +50,7 @@ export class ProjectRegisterComponent implements OnInit, AfterViewInit {
     this.crearFormulario();
     this.consultarProgramas();
     this.consultarEstadosProyectos();
+    this.setupCodeGeneration();
   }
 
   consultarEstadosProyectos(): void {
@@ -63,19 +65,18 @@ export class ProjectRegisterComponent implements OnInit, AfterViewInit {
 
   crearFormulario(): void {
     this.formularioProyectos = this.formBuilder.group({
-      codigo: [{ value: '', disabled: true }, [Validators.required, Validators.maxLength(15)]],
-      programa: ['', [Validators.required]],
-      nombreProyecto: ['', [Validators.required, Validators.maxLength(255)]],
-      objetivoGeneral: ['', [Validators.required, Validators.maxLength(255)]],
-      anio: ['', [Validators.required, Validators.pattern(SOLO_NUMEROS), Validators.maxLength(4)]],
-      procedencia: ['', [Validators.required, Validators.maxLength(100)]],
-      investigadorUno: ['', [Validators.required, Validators.maxLength(100)]],
-      investigadorDos: ['', [Validators.maxLength(100)]],
-      investigadorTres: ['', [Validators.maxLength(100)]],
-      fechaInicio: ['', [Validators.pattern(FORMATO_FECHA), Validators.maxLength(10), Validators.required]],
-      fechaFin: ['', [Validators.pattern(FORMATO_FECHA), Validators.maxLength(10), Validators.required]],
-      valor: ['', [Validators.pattern(SOLO_NUMEROS), Validators.maxLength(10)]],
-      estado: ['', [Validators.required]],
+      code: [{ value: '', disabled: true }, Validators.required],
+      program_id: ['', [Validators.required]],
+      name: ['', [Validators.required, Validators.maxLength(255)]],
+      objective: ['', [Validators.required, Validators.maxLength(255)]],
+      source: ['', [Validators.required, Validators.maxLength(100)]],
+      researcher_one: ['', [Validators.required, Validators.maxLength(100)]],
+      researcher_two: ['', [Validators.maxLength(100)]],
+      researcher_three: ['', [Validators.maxLength(100)]],
+      start_date: ['', [Validators.pattern(FORMATO_FECHA), Validators.maxLength(10), Validators.required]],
+      end_date: ['', [Validators.pattern(FORMATO_FECHA), Validators.maxLength(10), Validators.required]],
+      value: ['', [Validators.pattern(SOLO_NUMEROS), Validators.maxLength(10)]],
+      status: ['', [Validators.required]],
     });
   }
 
@@ -108,33 +109,30 @@ export class ProjectRegisterComponent implements OnInit, AfterViewInit {
     this.mensajeAlerta = '';
     if (this.formularioProyectos.valid) {
       const body: SaveProject = {
-        codigo: this.formularioProyectos.get('codigo')!.value,
-        nombreProyecto: this.formularioProyectos.get('nombreProyecto')!.value,
-        objetivoGeneral: this.formularioProyectos.get('objetivoGeneral')!.value,
-        programa: this.formularioProyectos.get('programa')!.value,
-        anio: this.formularioProyectos.get('anio')!.value,
-        procedencia: this.formularioProyectos.get('procedencia')!.value,
-        investigadorUno: this.formularioProyectos.get('investigadorUno')!.value,
-        investigadorDos: this.formularioProyectos.get('investigadorDos')!.value,
-        investigadorTres: this.formularioProyectos.get('investigadorTres')!.value,
-        fechaInicio: this.formularioProyectos.get('fechaInicio')!.value,
-        fechaFin: this.formularioProyectos.get('fechaFin')!.value,
-        estado: this.formularioProyectos.get('estado')!.value,
-        valorProyecto: this.formularioProyectos.get('valor')!.value,
-        cantidadProyectos: this.maximo,
-      };
+        code: this.formularioProyectos.get('code')!.value,
+        name: this.formularioProyectos.get('name')!.value,
+        objective: this.formularioProyectos.get('objective')!.value,
+        program_id: this.formularioProyectos.get('program_id')!.value,
+        source: this.formularioProyectos.get('source')!.value,
+        researcher_one: this.formularioProyectos.get('researcher_one')!.value,
+        researcher_two: this.formularioProyectos.get('researcher_two')!.value,
+        researcher_three: this.formularioProyectos.get('researcher_three')!.value,
+        start_date: this.formularioProyectos.get('start_date')!.value,
+        end_date: this.formularioProyectos.get('end_date')!.value,
+        status: this.formularioProyectos.get('status')!.value,
+        value: this.formularioProyectos.get('value')!.value,      };
       this.validarFechas(body);
     }
   }
 
   validarFechas(proyecto: SaveProject): void {
-    if (proyecto.fechaInicio >= proyecto.fechaFin) {
-      this.formularioProyectos.controls['fechaFin'].setErrors({ menos: true });
+    if (proyecto.start_date >= proyecto.end_date) {
+      this.formularioProyectos.controls['end_date'].setErrors({ menos: true });
     } else {
       this.proyectosService.guardarProyecto(proyecto).subscribe(
         () => this.router.navigate(['/dashboard']),
         (_) => {
-          this.mensajeAlerta = `Error al guardar el proyecto ${proyecto.codigo}`;
+          this.mensajeAlerta = `Error al guardar el proyecto ${proyecto.code}`;
           this.tipoAlerta = 'text-danger';
         }
       );
@@ -142,20 +140,75 @@ export class ProjectRegisterComponent implements OnInit, AfterViewInit {
   }
 
   programaSeleccionado(evento: any): void {
-    const programaSeleccionado = this.listaProgramas.find((programa) => programa.carrera === evento.value);
+    const programaSeleccionado = this.listaProgramas?.find(
+      (programa) => programa.carrera === evento.value
+    );
+
     if (programaSeleccionado) {
       this.pronombre = programaSeleccionado.pronombre;
       this.idPrograma = programaSeleccionado.id;
       this.nombrePrograma = programaSeleccionado.carrera;
-      this.generarCodigo();
     }
   }
 
-  generarCodigo(): void {
-    this.proyectosService.obtenerGeneradorId(this.nombrePrograma).subscribe((valor: string) => {
-      this.maximo = valor;
-      const codigo = `${this.pronombre}-${this.idPrograma}-${this.formularioProyectos.get('anio')!.value}-${valor}`;
-      this.formularioProyectos.get('codigo')!.setValue(codigo);
+  setupCodeGeneration(): void {
+    this.formularioProyectos.get('program_id')?.valueChanges.subscribe((programId: string) => {
+      const programIdNumber = parseInt(programId, 10);
+      const programaSeleccionado = this.listaProgramas?.find(
+        (programa) => programa.id === programIdNumber
+      );
+      if (programaSeleccionado) {
+        this.pronombre = programaSeleccionado.pronombre;
+        this.actualizarCantidadProyectos();
+      } else {
+        this.pronombre = '';
+      }
+      this.actualizarCodigo();
     });
+
+    this.formularioProyectos.get('start_date')?.valueChanges.subscribe((startDate) => {
+      if (startDate) {
+        const parsedDate = new Date(startDate);
+        if (!isNaN(parsedDate.getTime())) {
+          this.anioProyecto = parsedDate.getFullYear().toString();
+        } else {
+          this.anioProyecto = '';
+        }
+      } else {
+        this.anioProyecto = '';
+      }
+      this.actualizarCodigo();
+    });
+  }
+
+  actualizarCantidadProyectos(): void {
+    this.proyectosService.consultarCantidadProyectosPrograma(this.pronombre).subscribe({
+      next: (cantidad: string) => {
+        const cantidadNumerica = parseInt(cantidad, 10);
+        if (!isNaN(cantidadNumerica)) {
+          this.cantidadProyectos = cantidadNumerica;
+        } else {
+          this.cantidadProyectos = 0;
+        }
+        this.actualizarCodigo();
+      },
+      error: (error) => {
+        console.error('Error al obtener la cantidad de proyectos:', error);
+        this.cantidadProyectos = 0;
+        this.actualizarCodigo();
+      },
+    });
+  }
+
+  actualizarCodigo(): void {
+    if (!this.pronombre) {
+      this.formularioProyectos.get('code')?.setValue('');
+      return;
+    }
+    const codigoGenerado = this.anioProyecto
+      ? `${this.pronombre}-${this.cantidadProyectos}-${this.anioProyecto}`
+      : `${this.pronombre}-${this.cantidadProyectos}`;
+
+    this.formularioProyectos.get('code')?.setValue(codigoGenerado);
   }
 }

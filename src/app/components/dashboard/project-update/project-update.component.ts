@@ -1,7 +1,8 @@
+import { UpdateProject } from './../../../interface/projects';
 import { Component, OnInit, ElementRef } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
-import { FORMATO_FECHA, SOLO_NUMEROS } from '../../../constants/special-character';
+import { FORMATO_FECHA } from '../../../constants/special-character';
 import { VALIDACIONES_FORMULARIO_GUARDAR_PROYECTO } from '../../../constants/form-validations';
 import { Status } from '../../../interface/status';
 import { Programs } from './../../../interface/programs';
@@ -23,10 +24,11 @@ export class ProjectUpdateComponent implements OnInit{
 
   formularioProyectos!: FormGroup;
   pronombre: string = '';
-  idPrograma: string = '';
+  idPrograma: number = 0;
   anioProyecto: string = '';
   listaProgramas: Programs[] = [];
   proyecto: Project = {} as Project;
+  updateproject: UpdateProject = {} as UpdateProject;
   mensajeAlerta: string = '';
   tipoAlerta: string = '';
   programa: string = '';
@@ -65,38 +67,28 @@ export class ProjectUpdateComponent implements OnInit{
   asignarCampos(): void {
     if (this.proyecto) {
       this.formularioProyectos.patchValue({
-        codigo: this.proyecto.codigo,
-        programa: this.proyecto.programa,
-        nombreProyecto: this.proyecto.nombreProyecto,
-        objetivoGeneral: this.proyecto.objetivoGeneral,
-        anio: this.proyecto.anio,
-        procedencia: this.proyecto.procedencia,
-        investigadorUno: this.proyecto.investigadorUno,
-        investigadorDos: this.proyecto.investigadorDos,
-        investigadorTres: this.proyecto.investigadorTres,
-        fechaInicio: this.proyecto.fechaInicio,
-        fechaFin: this.proyecto.fechaFin,
-        estado: this.proyecto.estado,
-        valor: this.proyecto.valorProyecto
+        name: this.proyecto.nombreProyecto,
+        objective: this.proyecto.objetivoGeneral,
+        source: this.proyecto.procedencia,
+        researcher_one: this.proyecto.investigadorUno,
+        researcher_two: this.proyecto.investigadorDos,
+        researcher_three: this.proyecto.investigadorTres,
+        end_date: this.proyecto.fechaFin,
+        status: this.proyecto.estado
       });
     }
   }
 
   crearFormulario(): void {
     this.formularioProyectos = this.formBuilder.group({
-      codigo: [{ value: '', disabled: true }, [Validators.required, Validators.maxLength(15)]],
-      programa: ['', [Validators.required]],
-      nombreProyecto: ['', [Validators.required, Validators.maxLength(255)]],
-      objetivoGeneral: ['', [Validators.required, Validators.maxLength(255)]],
-      anio: ['', [Validators.required, Validators.pattern(SOLO_NUMEROS), Validators.maxLength(4)]],
-      procedencia: ['', [Validators.required, Validators.maxLength(100)]],
-      investigadorUno: ['', [Validators.required, Validators.maxLength(100)]],
-      investigadorDos: ['', [Validators.maxLength(100)]],
-      investigadorTres: ['', [Validators.maxLength(100)]],
-      fechaInicio: ['', [Validators.pattern(FORMATO_FECHA), Validators.maxLength(10), Validators.required]],
-      fechaFin: ['', [Validators.pattern(FORMATO_FECHA), Validators.maxLength(10), Validators.required]],
-      valor: ['', [Validators.pattern(SOLO_NUMEROS), Validators.maxLength(10)]],
-      estado: ['', [Validators.required]]
+      name: ['', [Validators.required, Validators.maxLength(255)]],
+      objective: ['', [Validators.required, Validators.maxLength(255)]],
+      source: ['', [Validators.required, Validators.maxLength(100)]],
+      researcher_one: ['', [Validators.required, Validators.maxLength(100)]],
+      researcher_two: ['', [Validators.maxLength(100)]],
+      researcher_three: ['', [Validators.maxLength(100)]],
+      end_date: ['', [Validators.pattern(FORMATO_FECHA), Validators.maxLength(10), Validators.required]],
+      status: ['', [Validators.required]]
     });
   }
 
@@ -133,7 +125,7 @@ export class ProjectUpdateComponent implements OnInit{
           this.router.navigate([`detail-project`, this.proyecto.id]);
         },
         () => {
-          this.mensajeAlerta = `Error al guardar el proyecto ${proyecto.codigo}`;
+          this.mensajeAlerta = `Error al guardar el proyecto ${proyecto.code}`;
           this.tipoAlerta = 'text-danger';
         }
       );
@@ -152,24 +144,5 @@ export class ProjectUpdateComponent implements OnInit{
     }
   }
 
-  generarCodigo(): void {
-    this.proyectosServices.obtenerGeneradorId(this.programa).subscribe((valor: string) => {
-      this.maximo = valor;
-      const codigo = `${this.pronombre}-${this.idPrograma}-${this.formularioProyectos.get('anio')?.value}-${valor}`;
-      this.formularioProyectos.get('codigo')?.setValue(codigo);
-    });
-  }
-
-  programaSeleccionado(evento: any): void {
-    const res = evento.value ?? this.programa;
-    const programaSeleccionado = this.listaProgramas.find((programa) => programa.carrera === res);
-
-    if (programaSeleccionado) {
-      this.pronombre = programaSeleccionado.pronombre;
-      this.idPrograma = programaSeleccionado.id;
-      this.programa = programaSeleccionado.carrera;
-      this.generarCodigo();
-    }
-  }
 
 }

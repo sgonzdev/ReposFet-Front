@@ -10,115 +10,109 @@
         <div class="container mt-5">
             <div class="row">
                 <mat-form-field class="col-lg-6" appearance="outline">
-                    <mat-label>Código</mat-label>
-                    <input matInput type="text" placeholder="Código" formControlName="codigo" />
-                    <mat-error *ngIf="campoEsInvalido('codigo')" class="text-danger">
-                        {{ obtenerMensajeErrorCampo('codigo') }}
-                    </mat-error>
+                  <mat-label>Código</mat-label>
+                  <input matInput type="text" placeholder="Código" formControlName="code" />
+                  <mat-error *ngIf="campoEsInvalido('code')" class="text-danger">
+                    {{ obtenerMensajeErrorCampo('code') }}
+                  </mat-error>
                 </mat-form-field>
+
                 <mat-form-field class="col-12 col-lg-6 pe-0 pe-lg-3" appearance="outline">
                     <mat-label>Programa</mat-label>
-                    <mat-select formControlName="programa" (selectionChange)="programaSeleccionado($event)">
+                    <mat-select formControlName="program_id" (selectionChange)="programaSeleccionado($event)">
                         <mat-option *ngFor="
                         let item of listaProgramas
-                      " value="{{ item.carrera }}">{{ item.carrera }}</mat-option>
+                      " value="{{ item.id }}">{{ item.carrera }}</mat-option>
                     </mat-select>
-                    <mat-error *ngIf="campoEsInvalido('programa')">
-                        {{ obtenerMensajeErrorCampo('programa') }}
+                    <mat-error *ngIf="campoEsInvalido('program_id')">
+                        {{ obtenerMensajeErrorCampo('program_id') }}
                     </mat-error>
                 </mat-form-field>
             </div>
             <div class="row mt-2">
                 <mat-form-field class="col-lg-6" appearance="outline">
                     <mat-label>Nombre del proyecto</mat-label>
-                    <input matInput type="text" placeholder="Nombre del proyecto" formControlName="nombreProyecto" />
-                    <mat-error *ngIf="campoEsInvalido('nombreProyecto')" class="text-danger">
-                        {{ obtenerMensajeErrorCampo('nombreProyecto') }}
+                    <input matInput type="text" placeholder="Nombre del proyecto" formControlName="name" />
+                    <mat-error *ngIf="campoEsInvalido('name')" class="text-danger">
+                        {{ obtenerMensajeErrorCampo('name') }}
                     </mat-error>
                 </mat-form-field>
                 <mat-form-field class="col-lg-6" appearance="outline">
                     <mat-label>Objetivo general</mat-label>
-                    <input matInput type="text" placeholder="Objetivo general" formControlName="objetivoGeneral" />
-                    <mat-error *ngIf="campoEsInvalido('objetivoGeneral')" class="text-danger">
-                        {{ obtenerMensajeErrorCampo('objetivoGeneral') }}
-                    </mat-error>
-                </mat-form-field>
-            </div>
-            <div class="row mt-2">
-                <mat-form-field class="col-lg-6" appearance="outline">
-                    <mat-label>Año</mat-label>
-                    <input matInput type="text" placeholder="Año" formControlName="anio" (keyup)="generarCodigo()"/>
-                    <mat-error *ngIf="campoEsInvalido('anio')" class="text-danger">
-                        {{ obtenerMensajeErrorCampo('anio') }}
-                    </mat-error>
-                </mat-form-field>
-                <mat-form-field class="col-lg-6" appearance="outline">
-                    <mat-label>Procedencia</mat-label>
-                    <input matInput type="text" placeholder="Procedencia" formControlName="procedencia" />
-                    <mat-error *ngIf="campoEsInvalido('procedencia')" class="text-danger">
-                        {{ obtenerMensajeErrorCampo('procedencia') }}
+                    <input matInput type="text" placeholder="Objetivo general" formControlName="objective" />
+                    <mat-error *ngIf="campoEsInvalido('objective')" class="text-danger">
+                        {{ obtenerMensajeErrorCampo('objective') }}
                     </mat-error>
                 </mat-form-field>
             </div>
             <div class="row mt-2">
                 <mat-form-field class="col-lg-4" appearance="outline">
                     <mat-label>Investigador uno</mat-label>
-                    <input matInput type="text" placeholder="Investigador uno" formControlName="investigadorUno" />
-                    <mat-error *ngIf="campoEsInvalido('investigadorUno')" class="text-danger">
-                        {{ obtenerMensajeErrorCampo('investigadorUno') }}
+                    <input matInput type="text" placeholder="Investigador uno" formControlName="researcher_one" />
+                    <mat-error *ngIf="campoEsInvalido('researcher_one')" class="text-danger">
+                        {{ obtenerMensajeErrorCampo('researcher_one') }}
                     </mat-error>
                 </mat-form-field>
                 <mat-form-field class="col-lg-4" appearance="outline">
                     <mat-label>Investigador dos</mat-label>
-                    <input matInput type="text" placeholder="Investigador dos" formControlName="investigadorDos" />
-                    <mat-error *ngIf="campoEsInvalido('investigadorDos')" class="text-danger">
-                        {{ obtenerMensajeErrorCampo('investigadorDos') }}
+                    <input matInput type="text" placeholder="Investigador dos" formControlName="researcher_two" />
+                    <mat-error *ngIf="campoEsInvalido('researcher_two')" class="text-danger">
+                        {{ obtenerMensajeErrorCampo('researcher_two') }}
                     </mat-error>
                 </mat-form-field>
                 <mat-form-field class="col-lg-4" appearance="outline">
                     <mat-label>Investigador tres</mat-label>
-                    <input matInput type="text" placeholder="Investigador tres" formControlName="investigadorTres" />
-                    <mat-error *ngIf="campoEsInvalido('investigadorTres')" class="text-danger">
-                        {{ obtenerMensajeErrorCampo('investigadorTres') }}
+                    <input matInput type="text" placeholder="Investigador tres" formControlName="researcher_three" />
+                    <mat-error *ngIf="campoEsInvalido('researcher_three')" class="text-danger">
+                        {{ obtenerMensajeErrorCampo('researcher_three') }}
                     </mat-error>
                 </mat-form-field>
             </div>
             <div class="row mt-2">
                 <mat-form-field class="col-lg-6" appearance="outline">
                     <mat-label>Fecha inicio</mat-label>
-                    <input matInput type="text" placeholder="DD/MM/YYYY" formControlName="fechaInicio" />
-                    <mat-error *ngIf="campoEsInvalido('fechaInicio')" class="text-danger">
-                        {{ obtenerMensajeErrorCampo('fechaInicio') }}
+                    <input matInput type="text" placeholder="DD/MM/YYYY" formControlName="start_date" />
+                    <mat-error *ngIf="campoEsInvalido('start_date')" class="text-danger">
+                        {{ obtenerMensajeErrorCampo('start_date') }}
                     </mat-error>
                 </mat-form-field>
 
                 <mat-form-field class="col-lg-6" appearance="outline">
                     <mat-label>Fecha fin</mat-label>
-                    <input matInput type="text" placeholder="DD/MM/YYYY" formControlName="fechaFin" />
-                    <mat-error *ngIf="campoEsInvalido('fechaFin')" class="text-danger">
-                        {{ obtenerMensajeErrorCampo('fechaFin') }}
+                    <input matInput type="text" placeholder="DD/MM/YYYY" formControlName="end_date" />
+                    <mat-error *ngIf="campoEsInvalido('end_date')" class="text-danger">
+                        {{ obtenerMensajeErrorCampo('end_date') }}
                     </mat-error>
                 </mat-form-field>
             </div>
             <div class="row mt-2">
                 <mat-form-field class="col-lg-6" appearance="outline">
                     <mat-label>Valor del proyecto</mat-label>
-                    <input matInput type="text" placeholder="Valor del proyecto" formControlName="valor" />
-                    <mat-error *ngIf="campoEsInvalido('valor')" class="text-danger">
-                        {{ obtenerMensajeErrorCampo('valor') }}
+                    <input matInput type="text" placeholder="Valor del proyecto" formControlName="value" />
+                    <mat-error *ngIf="campoEsInvalido('value')" class="text-danger">
+                        {{ obtenerMensajeErrorCampo('value') }}
                     </mat-error>
                 </mat-form-field>
                 <mat-form-field class="col-12 col-lg-6 pe-0 pe-lg-3" appearance="outline">
                     <mat-label>Estado</mat-label>
-                    <mat-select formControlName="estado" >
+                    <mat-select formControlName="status" >
                         <mat-option *ngFor="
                         let item of estadosProyectos
                       " value="{{ item.estado }}">{{ item.estado }}</mat-option>
                     </mat-select>
-                    <mat-error *ngIf="campoEsInvalido('estado')">
-                        {{ obtenerMensajeErrorCampo('estado') }}
+                    <mat-error *ngIf="campoEsInvalido('status')">
+                        {{ obtenerMensajeErrorCampo('status') }}
                     </mat-error>
                 </mat-form-field>
+            </div>
+            <div class="row mt-2">
+              <mat-form-field class="col-lg-6" appearance="outline">
+                <mat-label>Procedencia</mat-label>
+                <input matInput type="text" placeholder="Procedencia" formControlName="source" />
+                <mat-error *ngIf="campoEsInvalido('source')" class="text-danger">
+                    {{ obtenerMensajeErrorCampo('source') }}
+                </mat-error>
+            </mat-form-field>
             </div>
 
             <div *ngIf="mensajeAlerta!=''" class="{{tipoAlerta}}">

@@ -45,6 +45,7 @@ export class IndexComponent implements AfterViewInit {
   consultarProyectos(): void {
     this.proyectosService.consultarProyectos().subscribe((listaProyectos: ProjectList[]) => {
       this.listaProyectos = listaProyectos;
+      console.log(this.listaProyectos);
     });
   }
 

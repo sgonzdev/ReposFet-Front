@@ -9,9 +9,16 @@
               <li class="nav-item">
                   <a routerLink="/dashboard" class="nav-link"> <span>Pantalla principal</span></a>
                   <a routerLink="/project-register" class="nav-link"> <span>Registrar proyectos</span></a>
-                  <!--<a href="crypto.html" class="nav-link"> <span>Registro de usuarios</span></a>-->
               </li>
           </ul>
+      </div>
+      <div class="nav-group show">
+        <a href="#" class="nav-label">Sesion</a>
+        <ul class="nav nav-sidebar">
+          <li class="nav-item">
+            <a (click)="logout()" class="nav-link"> <span>Cerrar Sesion</span></a>
+          </li>
+        </ul>
       </div>
   </div>
 </div>
